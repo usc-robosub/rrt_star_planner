@@ -1,0 +1,6 @@
+# PlanPath.srv
+# Place this file in rrt_star_planner/srv/PlanPath.srv
+
+geometry_msgs/PoseStamped goal_pose
+---
+barracuda_msgs/Waypoints waypoints
