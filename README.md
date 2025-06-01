@@ -24,6 +24,7 @@ This package provides a 3D path planning solution using the RRT* algorithm, whic
 ### Running the Planner
 
 1. Launch the RRT* planner node:
+
 ```bash
 roslaunch rrt_star_planner rrt_star_planner.launch
 ```
@@ -36,16 +37,19 @@ The planner provides a ROS service for path planning:
 **Type**: `rrt_star_planner/PlanPath`
 
 **Request**:
-```
+
+```ros
 geometry_msgs/PoseStamped goal_pose
 ```
 
 **Response**:
-```
+
+```ros
 barracuda_msgs/Waypoints waypoints
 ```
 
 Example service call:
+
 ```bash
 rosservice call /plan_path "goal_pose:
   header:
@@ -71,7 +75,7 @@ rosservice call /plan_path "goal_pose:
 
 #### Published Topics
 
-- `/planned_path` (barracuda_msgs/Waypoints)
+- `/planned_path` ([barracuda_msgs/Waypoints](https://github.com/usc-robosub/barracuda_msgs/tree/main))
   - The planned path as a series of waypoints
 
 - `/planned_path_viz` ([nav_msgs/Path](http://docs.ros.org/api/nav_msgs/html/msg/Path.html))
