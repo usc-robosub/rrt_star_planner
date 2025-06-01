@@ -1,6 +1,6 @@
 # rrt_star_planner
 
-# RRT* 3D Path Planner for ROS
+## RRT* 3D Path Planner for ROS
 
 A ROS package implementing the RRT* (Rapidly-exploring Random Tree Star) algorithm for 3D path planning with point cloud-based obstacle avoidance.
 
