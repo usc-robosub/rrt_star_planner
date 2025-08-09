@@ -52,7 +52,7 @@ RRTStarPlanner::RRTStarPlanner()
     plan_service_ = nh_.advertiseService("plan_path", &RRTStarPlanner::planPathService, this);
     
     // Publishers
-    path_pub_ = nh_.advertise<barracuda_msgs::Waypoints>("planned_path", 1);
+    path_pub_ = nh_.advertise<barracuda_msgs::Waypoints>("rrt_waypoints", 1);
     tree_pub_ = nh_.advertise<visualization_msgs::MarkerArray>("rrt_tree", 1);
     marker_pub_ = nh_.advertise<visualization_msgs::MarkerArray>("planning_markers", 1);
     
