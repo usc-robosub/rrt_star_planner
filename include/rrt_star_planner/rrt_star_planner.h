@@ -10,13 +10,16 @@
 #include <pcl/kdtree/kdtree_flann.h>
 #include <visualization_msgs/MarkerArray.h>
 #include <barracuda_msgs/Waypoints.h>
+// Collision check service
+#include <barracuda_msgs/CheckCollision.h>
 
-// Custom service
-#include "rrt_star_planner/PlanPath.h"
+// Plan service
+#include <barracuda_msgs/PlanPath.h>
 
 #include <random>
 #include <vector>
 #include <memory>
+#include <string>
 
 class RRTNode {
 public:
@@ -39,6 +42,7 @@ private:
     
     // Service
     ros::ServiceServer plan_service_;
+    ros::ServiceClient collision_client_;
     
     // Publishers for visualization
     ros::Publisher path_pub_;
@@ -69,12 +73,13 @@ private:
     std::uniform_real_distribution<double> z_dist_;
     std::uniform_real_distribution<double> goal_bias_dist_;
     double goal_bias_probability_;
+    std::string collision_service_name_;
     
     // Private methods
     void poseCallback(const geometry_msgs::PoseStamped::ConstPtr& msg);
     void pointcloudCallback(const sensor_msgs::PointCloud2::ConstPtr& msg);
-    bool planPathService(rrt_star_planner::PlanPath::Request& req,
-                        rrt_star_planner::PlanPath::Response& res);
+    bool planPathService(barracuda_msgs::PlanPath::Request& req,
+                        barracuda_msgs::PlanPath::Response& res);
     
     std::vector<geometry_msgs::Point> planPath(const geometry_msgs::Point& start,
                                                const geometry_msgs::Point& goal);

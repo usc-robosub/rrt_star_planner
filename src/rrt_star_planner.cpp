@@ -50,6 +50,9 @@ RRTStarPlanner::RRTStarPlanner()
     
     // Service
     plan_service_ = nh_.advertiseService("plan_path", &RRTStarPlanner::planPathService, this);
+    // Collision check service client
+    pnh_.param<std::string>("check_collision_service", collision_service_name_, std::string("check_collision"));
+    collision_client_ = nh_.serviceClient<barracuda_msgs::CheckCollision>(collision_service_name_);
     
     // Publishers
     path_pub_ = nh_.advertise<barracuda_msgs::Waypoints>("rrt_waypoints", 1);
@@ -72,8 +75,8 @@ void RRTStarPlanner::pointcloudCallback(const sensor_msgs::PointCloud2::ConstPtr
     }
 }
 
-bool RRTStarPlanner::planPathService(rrt_star_planner::PlanPath::Request& req,
-                                    rrt_star_planner::PlanPath::Response& res) {
+bool RRTStarPlanner::planPathService(barracuda_msgs::PlanPath::Request& req,
+                                    barracuda_msgs::PlanPath::Response& res) {
     
     if (!pose_received_) {
         ROS_ERROR("No robot pose received yet!");
@@ -273,32 +276,37 @@ geometry_msgs::Point RRTStarPlanner::steer(const geometry_msgs::Point& from,
 
 bool RRTStarPlanner::isCollisionFree(const geometry_msgs::Point& from,
                                     const geometry_msgs::Point& to) {
-    if (!pointcloud_received_ || obstacle_cloud_->empty()) {
-        return true; // No obstacles
-    }
-    
-    // Check points along the line
+    // Discretize the segment and query collision service
     double dist = distance(from, to);
     int num_checks = std::max(2, static_cast<int>(dist / (robot_radius_ * 0.5)));
-    
+
+    if (!collision_client_.exists()) {
+        // Try waiting briefly for service to appear
+        collision_client_.waitForExistence(ros::Duration(0.5));
+    }
+
     for (int i = 0; i <= num_checks; ++i) {
         double t = static_cast<double>(i) / num_checks;
-        
-        pcl::PointXYZ check_point;
-        check_point.x = from.x + t * (to.x - from.x);
-        check_point.y = from.y + t * (to.y - from.y);
-        check_point.z = from.z + t * (to.z - from.z);
-        
-        // Find points within robot radius
-        std::vector<int> indices;
-        std::vector<float> distances;
-        kdtree_->radiusSearch(check_point, robot_radius_, indices, distances);
-        
-        if (!indices.empty()) {
-            return false; // Collision detected
+
+        geometry_msgs::Point center;
+        center.x = from.x + t * (to.x - from.x);
+        center.y = from.y + t * (to.y - from.y);
+        center.z = from.z + t * (to.z - from.z);
+
+        barracuda_msgs::CheckCollision srv;
+        srv.request.center = center;
+        srv.request.radius = robot_radius_;
+
+        if (!collision_client_.call(srv)) {
+            ROS_WARN_THROTTLE(1.0, "Collision service '%s' call failed; assuming collision.", collision_service_name_.c_str());
+            return false;
+        }
+
+        if (srv.response.collision) {
+            return false;
         }
     }
-    
+
     return true;
 }
 

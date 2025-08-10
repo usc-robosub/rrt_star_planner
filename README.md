@@ -34,7 +34,7 @@ roslaunch rrt_star_planner rrt_star_planner.launch
 The planner provides a ROS service for path planning:
 
 **Service**: `/plan_path`
-**Type**: `rrt_star_planner/PlanPath`
+**Type**: `barracuda_msgs/PlanPath`
 
 **Request**:
 

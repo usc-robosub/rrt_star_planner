@@ -15,25 +15,13 @@ find_package(catkin REQUIRED COMPONENTS
   pcl_conversions
   tf2
   tf2_geometry_msgs
-  message_generation
   barracuda_msgs
 )
 
 ## System dependencies
 find_package(PCL REQUIRED)
 
-## Generate services in the 'srv' folder
-add_service_files(
-  FILES
-  PlanPath.srv
-)
-
-## Generate added messages and services with any dependencies listed here
-generate_messages(
-  DEPENDENCIES
-  geometry_msgs
-  barracuda_msgs
-)
+## No local messages/services to generate
 
 ###################################
 ## catkin specific configuration ##
@@ -51,7 +39,6 @@ catkin_package(
     pcl_conversions 
     tf2 
     tf2_geometry_msgs 
-    message_runtime
     barracuda_msgs
 )
 

@@ -7,7 +7,7 @@ from sensor_msgs.msg import PointCloud2, PointField
 from std_msgs.msg import Header
 from visualization_msgs.msg import MarkerArray
 import sensor_msgs.point_cloud2 as pc2
-from rrt_star_planner.srv import PlanPath, PlanPathRequest
+from barracuda_msgs.srv import PlanPath, PlanPathRequest
 import time
 import sys
 
