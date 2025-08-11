@@ -8,18 +8,16 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
+  nav_msgs
   geometry_msgs
   sensor_msgs
   visualization_msgs
-  pcl_ros
-  pcl_conversions
   tf2
   tf2_geometry_msgs
   barracuda_msgs
 )
 
-## System dependencies
-find_package(PCL REQUIRED)
+## No external PCL dependencies; collision via service
 
 ## No local messages/services to generate
 
@@ -32,11 +30,10 @@ catkin_package(
     roscpp 
     rospy 
     std_msgs 
+    nav_msgs 
     geometry_msgs 
     sensor_msgs 
     visualization_msgs 
-    pcl_ros 
-    pcl_conversions 
     tf2 
     tf2_geometry_msgs 
     barracuda_msgs
@@ -50,7 +47,6 @@ catkin_package(
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
-  ${PCL_INCLUDE_DIRS}
 )
 
 ## Declare a C++ executable
@@ -65,7 +61,6 @@ add_dependencies(rrt_star_planner_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${cat
 ## Specify libraries to link a library or executable target against
 target_link_libraries(rrt_star_planner_node
   ${catkin_LIBRARIES}
-  ${PCL_LIBRARIES}
 )
 
 #############

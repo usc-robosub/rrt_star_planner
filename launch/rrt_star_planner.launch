@@ -20,8 +20,5 @@
     <!-- Collision service -->
     <param name="check_collision_service" value="/check_collision" />
     
-    <!-- Topic remapping if needed -->
-    <remap from="robot_pose" to="/robot/pose" />
-    <remap from="obstacle_pointcloud" to="/mapping/pointcloud" />
   </node>
 </launch>
