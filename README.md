@@ -2,16 +2,16 @@
 
 ## RRT* 3D Path Planner for ROS
 
-A ROS package implementing the RRT* (Rapidly-exploring Random Tree Star) algorithm for 3D path planning with point cloud-based obstacle avoidance.
+A ROS package implementing the RRT* (Rapidly-exploring Random Tree Star) algorithm for 3D path planning with collision checking via a service interface.
 
 ## Overview
 
-This package provides a 3D path planning solution using the RRT* algorithm, which finds near-optimal paths in 3D space while avoiding obstacles. The planner represents the robot as a sphere and uses point cloud data for collision checking.
+This package provides a 3D path planning solution using the RRT* algorithm, which finds near-optimal paths in 3D space while avoiding obstacles. The planner represents the robot as a sphere and queries a collision-checking service to determine free space.
 
 ### Key Features
 
 - **3D RRT* Implementation**: Efficient path planning in 3D space
-- **Point Cloud Collision Checking**: Uses KD-tree for fast collision detection
+- **Service-based Collision Checking**: Uses a collision service to validate states and edges
 - **Path Optimization**: Includes rewiring for near-optimal paths and post-processing smoothing
 - **Real-time Visualization**: Visualize the RRT tree and planned path in RViz
 - **ROS Service Interface**: Easy integration with other ROS nodes
@@ -67,11 +67,8 @@ rosservice call /plan_path "goal_pose:
 
 #### Subscribed Topics
 
-- `/robot_pose` ([geometry_msgs/PoseStamped](http://docs.ros.org/api/geometry_msgs/html/msg/PoseStamped.html))
-  - Current robot position
-
-- `/obstacle_pointcloud` ([sensor_msgs/PointCloud2](http://docs.ros.org/api/sensor_msgs/html/msg/PointCloud2.html))
-  - Point cloud representing obstacles in the environment
+- `odometry/filtered/global` ([nav_msgs/Odometry](http://docs.ros.org/api/nav_msgs/html/msg/Odometry.html))
+  - Current robot odometry
 
 #### Published Topics
 

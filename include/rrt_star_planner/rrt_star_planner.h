@@ -2,12 +2,8 @@
 #define RRT_STAR_PLANNER_H
 
 #include <ros/ros.h>
-#include <geometry_msgs/PoseStamped.h>
+#include <nav_msgs/Odometry.h>
 #include <geometry_msgs/Point.h>
-#include <sensor_msgs/PointCloud2.h>
-#include <pcl_ros/point_cloud.h>
-#include <pcl/point_types.h>
-#include <pcl/kdtree/kdtree_flann.h>
 #include <visualization_msgs/MarkerArray.h>
 #include <barracuda_msgs/Waypoints.h>
 // Collision check service
@@ -38,7 +34,7 @@ private:
     
     // Subscribers
     ros::Subscriber pose_sub_;
-    ros::Subscriber pointcloud_sub_;
+    // No point cloud subscription; collision checked via service
     
     // Service
     ros::ServiceServer plan_service_;
@@ -49,14 +45,11 @@ private:
     ros::Publisher tree_pub_;
     ros::Publisher marker_pub_;
     
-    // Current robot pose
-    geometry_msgs::PoseStamped current_pose_;
+    // Current robot odometry
+    nav_msgs::Odometry current_odom_;
     bool pose_received_;
     
-    // Point cloud for obstacles
-    pcl::PointCloud<pcl::PointXYZ>::Ptr obstacle_cloud_;
-    pcl::KdTreeFLANN<pcl::PointXYZ>::Ptr kdtree_;
-    bool pointcloud_received_;
+    // No obstacle point cloud; rely on collision service
     
     // RRT* parameters
     double max_step_size_;
@@ -76,8 +69,8 @@ private:
     std::string collision_service_name_;
     
     // Private methods
-    void poseCallback(const geometry_msgs::PoseStamped::ConstPtr& msg);
-    void pointcloudCallback(const sensor_msgs::PointCloud2::ConstPtr& msg);
+    void poseCallback(const nav_msgs::Odometry::ConstPtr& msg);
+    // No pointcloud callback
     bool planPathService(barracuda_msgs::PlanPath::Request& req,
                         barracuda_msgs::PlanPath::Response& res);
     
