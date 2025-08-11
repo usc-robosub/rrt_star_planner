@@ -14,7 +14,7 @@
     <param name="x_max" value="10.0" />
     <param name="y_min" value="-10.0" />
     <param name="y_max" value="10.0" />
-    <param name="z_min" value="0.0" />
+    <param name="z_min" value="-5.0" />
     <param name="z_max" value="5.0" />
     
     <!-- Collision service -->
